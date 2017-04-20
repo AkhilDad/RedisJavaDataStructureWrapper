@@ -39,7 +39,7 @@ public class RedisList<E> extends AbstractList<E> {
     @Override
     public boolean add(E element) {
         try {
-            jedis.lpush(key, getStringValue(element));
+            jedis.rpush(key, getStringValue(element));
         } catch (IOException e) {
             e.printStackTrace();
             final RuntimeException runtimeException = new RuntimeException("Unable to insert");
@@ -131,7 +131,11 @@ public class RedisList<E> extends AbstractList<E> {
 
     private E getValueFromString(String value) {
         try {
-            return objectMapper.readValue(value, getGenericTypeClass());
+            if (typeClass  == String.class) {
+             return (E)value;
+            } else {
+                return objectMapper.readValue(value, getGenericTypeClass());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
