@@ -3,8 +3,6 @@ package com.upgrad.libs.redisjavawrapper.list;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.AbstractList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -144,9 +142,7 @@ public class RedisList<E> extends AbstractList<E> {
 
     @Override
     public int size() {
-        final Long llen = jedis.llen(key);
-        int size = llen == null ? 0 : llen.intValue();
-        return size;
+        return jedis.llen(key).intValue();
     }
 
     @Override

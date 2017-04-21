@@ -2,10 +2,13 @@ package com.upgrad.libs.redisjavaclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.upgrad.libs.redisjavawrapper.list.RedisList;
+import com.upgrad.libs.redisjavawrapper.set.RedisSet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import redis.clients.jedis.Jedis;
 
@@ -13,6 +16,19 @@ public class RedisClient {
     public static void main(String[] args) {
         Jedis jedis = new Jedis("localhost");
         System.out.println("Connection to server sucessfully");
+
+        RedisSet<String> redisSet = new RedisSet<>(jedis, "SetTest", String.class);
+        redisSet.add("Akhil");
+        redisSet.add("akhil");
+        redisSet.add("Akhil");
+        iterate(redisSet);
+        redisSet.add("Akhil Dad");
+        redisSet.add("Akhil dad");
+        iterate(redisSet);
+        redisSet.remove("Akhil");
+        iterate(redisSet);
+        redisSet.add("Akhil");
+        iterate(redisSet);
 //        User user = new User("Akhil");
 //        List<User> userList = new RedisList<>(jedis, "xyz", User.class);
 //        userList.clear();
@@ -38,34 +54,37 @@ public class RedisClient {
 //        }
 
 //        List<String> userList = new RedisList<>(jedis, "xchgsdyz", String.class);
-        List<String> userList = new ArrayList<>();
-        userList.clear();
-        userList.add("akhil");
-        userList.add("Akhil");
-        userList.add("Dad");
-        userList.add("akhil");
-        iterate(userList);
-        userList.remove(0);
-        iterate(userList);
-        userList.add(2, "Update");
-        userList.remove("akhil");
-        iterate(userList);
-        userList.add("1");
-        userList.add("2");
-        userList.add("3");
-        userList.add("4");
-        userList.add("5");
-        userList.add("6");
-        userList.add("7");
-        userList.add("8");
-        userList.add("9");
-        iterate(userList);
-        final List<String> stringList = userList.subList(5, 7);
-        iterate(stringList);
-        stringList.add("new value1");
-        stringList.add("new value2");
-        stringList.remove(0);
-        iterate(userList);
+//        List<String> userList = new ArrayList<>();
+//        userList.clear();
+//        userList.add("akhil");
+//        userList.add("Akhil");
+//        userList.add("Dad");
+//        userList.add("akhil");
+//        iterate(userList);
+//        userList.remove(0);
+//        iterate(userList);
+//        userList.add(2, "Update");
+//        userList.remove("akhil");
+//        iterate(userList);
+//        userList.add("1");
+//        userList.add("2");
+//        userList.add("3");
+//        userList.add("4");
+//        userList.add("5");
+//        userList.add("6");
+//        userList.add("7");
+//        userList.add("8");
+//        userList.add("9");
+//        iterate(userList);
+//        final List<String> stringList = userList.subList(5, 7);
+//        iterate(stringList);
+//        stringList.add("new value1");
+//        stringList.add("new value2");
+//        stringList.remove(0);
+//        iterate(userList);
+//        System.out.print("dsnjsdbj"+jedis.scard("dsjbkdvjkf"));
+//        System.out.print("dsnjsdbj"+jedis.llen("dsjbkdvjkf"));
+
 //        System.out.print("Last index of->"+userList.lastIndexOf("akhil"));
 //        User user1 = new User("Akhil");
 //        ObjectMapper objectMapper = new ObjectMapper();
@@ -92,6 +111,14 @@ public class RedisClient {
 //                e.printStackTrace();
 //            }
 //        }
+    }
+
+    private static void iterate(RedisSet<String> redisSet) {
+        System.out.println("\n\nIterating ---"+redisSet.size());
+        final Iterator<String> iterator = redisSet.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
     }
 
     private static <E> void iterate(List<E> userList) {
